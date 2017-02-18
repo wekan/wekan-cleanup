@@ -79,11 +79,11 @@ def main() :
 			lists.delete_one({'_id': list['_id']})
 
 	# Will delete cards with boardId or ListId or UserId not more in database
-	print "[CARDS] Checking orphan cards (boardId or listId or UserId not more in database)...."
+	print "[CARDS] Checking orphan cards (boardId or listId or userId not more in database)...."
 	for card in cards.find() :
 		# Get the board and list
-		if boards.count({"_id": card['boardId']}) == 0 or lists.count({"_id": card['listId']}) == 0 or users.count({"_id": card['UserId']}) == 0 :
-			print "[CARD] Deleting orphan card " + str(card['_id']) + " (boardId or listId or UserId not more in database)...."
+		if boards.count({"_id": card['boardId']}) == 0 or lists.count({"_id": card['listId']}) == 0 or users.count({"_id": card['userId']}) == 0 :
+			print "[CARD] Deleting orphan card " + str(card['_id']) + " (boardId or listId or userId not more in database)...."
 			cards.delete_one({'_id': card['_id']})
 
 	# Will delete card_comments with cardId more in database
