@@ -1,3 +1,12 @@
+#!/usr/bin/env python
+#
+# cleanup.py
+#
+# Simple tool that will clean MongoDb database for Wekan and delete "old" data
+#
+# Author: Florent MONTHEL (fmonthel@flox-arts.net)
+#
+
 #! /usr/bin/python
 
 import os
