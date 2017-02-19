@@ -44,7 +44,7 @@ def main() :
 	# Clean ALL live boards with no cards into
 	print "[BOARDS] Checking boards with no card into...."
 	for board in boards.find() :
-		if cards.count({"boardId": board['_id']}) == 0  and board['createddAt'] < time_clean_board_nocard :
+		if cards.count({"boardId": board['_id']}) == 0  and board['createdAt'] < time_clean_board_nocard :
 			print "[BOARD] Deleting board " + str(board['_id']) + " (0 card into and created more than " + str(day_to_keep_board_nocard) + " day(s) ago)...."
 			boards.delete_one({'_id': board['_id']})
 	
