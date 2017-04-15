@@ -6,7 +6,10 @@ Need to have below Python module : pymongo
 
     pip install pymongo
 
-You need to have authentification setup on Mongo database and port opened (if docker)
+You need to have authentification setup on Mongo database and port opened (if docker) and create user :
+
+    use admin
+    db.createUser({user: "admin",pwd: "admin123",roles: [ "readWrite"]})
 
 WekanCleanUp will manage below actions :
 
@@ -16,7 +19,7 @@ WekanCleanUp will manage below actions :
 - Removing from boards deleting users (if user deleted from database...)
 - Delete archived lists older that day_to_keep_list_arch
 - Delete archived cards older that day_to_keep_card_arch
-- Delete all the orphans objects at the end (lists,cards,checklists,cards_comments,attachements,activities)
+- Delete all the orphans objects at the end (lists,cards,checklists,cards_comments,attachements,files,chunks,activities)
 
 You need to update parameters before executing it
 

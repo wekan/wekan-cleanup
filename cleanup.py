@@ -46,6 +46,8 @@ def main() :
 	card_comments = db['card_comments']
 	activities = db['activities']
 	attachments = db['cfs.attachments.filerecord']
+	attachment_files = db['cfs_gridfs.attachments.files']
+	attachment_chunks = db['cfs_gridfs.attachments.chunks']
 	
 	# Check case of emails in database - Warning in case of not unique emails
 	print "[USERS] Checking users emails compliance (lowercase)..."
@@ -139,12 +141,29 @@ def main() :
 			card_comments.delete_one({'_id': card_comment['_id']})
 	
 	# Will delete attachments with cardId or userId more in database
-	print "[ATTACHEMENTS] Checking orphan attachments (cardId or userId not more in database)...."
+	print "[ATTACHMENTS] Checking orphan attachments (cardId or userId not more in database)...."
 	for attachment in attachments.find() :
 		# Get the card and user
-		if cards.count({"_id": attachment['cardId']}) == 0 or users.count({"_id": attachment['userId']}) == 0:
+		if cards.count({"_id": attachment['cardId']}) == 0 or users.count({"_id": attachment['userId']}) == 0 :
 			print "[ATTACHEMENT] Deleting orphan attachment " + str(attachment['_id']) + " (cardId or userId not more in database)...."
 			attachments.delete_one({'_id': attachment['_id']})
+			
+
+	# Will delete attachment_files with attachment more in database
+	print "[ATTACHMENT_FILES] Checking orphan attachment files (attachment not more in database)...."
+	for attachment_file in attachment_files.find() :
+		# Get the attachment associated
+		if attachments.count({"copies.attachments.key" : str(attachment_file['_id'])}) == 0 :
+			print "[ATTACHMENT_FILES] Deleting orphan attachment files " + str(attachment_file['_id']) + " (attachment not more in database)...."
+			attachment_files.delete_one({'_id': attachment_file['_id']})
+	
+	# Will delete attachment_chunks with file_id more in database
+	print "[ATTACHMENT_CHUNKS] Checking orphan attachment chunks (file_id not more in database)...."
+	for attachment_chunk in attachment_chunks.find() :
+		# Get the attachment associated
+		if attachments.count({"copies.attachments.key" : str(attachment_chunk['files_id'])}) == 0 :
+			print "[ATTACHMENT_CHUNKS] Deleting orphan attachment chunks " + str(attachment_chunk['_id']) + " (file_id not more in database)...."
+			attachment_chunks.delete_one({'_id': attachment_chunk['_id']})
 	
 	# Will delete activities
 	print "[ACTIVITIES] Checking orphan activities (cardId or userId or boardId or listId or oldListId or commentId not more in database)...."
