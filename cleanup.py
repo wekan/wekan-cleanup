@@ -128,7 +128,7 @@ def main() :
 	print "[CHECKLISTS] Checking orphan checklist (cardId or userId not more in database)...."
 	for checklist in checklists.find() :
 		# Get the card
-		if cards.count({"_id": checklist['cardId']}) == 0 or users.count({"_id": checklist['userId']}) == 0 :
+		if cards.count({"_id": checklist['cardId']}) == 0 or 'userId' not in checklist.keys() or users.count({"_id": checklist['userId']}) == 0 :
 			print "[CHECKLIST] Deleting orphan checklist " + str(checklist['_id']) + " (cardId or userId not more in database)...."
 			checklists.delete_one({'_id': checklist['_id']})
 
