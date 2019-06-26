@@ -178,7 +178,7 @@ def main() :
 		elif 'boardId' in activity and boards.count({"_id": activity['boardId']}) == 0 :
 			print "[ACTIVITY] Deleting orphan activity " + str(activity['_id']) + " (boardId not more in database)...."
 			activities.delete_one({'_id': activity['_id']})
-		elif 'listId' in activity and lists.count({"_id": activity['listId']}) == 0 :
+		elif 'listId' in activity and activity['listId'] is not None and lists.count({"_id": activity['listId']}) == 0 :
 			print "[ACTIVITY] Deleting orphan activity " + str(activity['_id']) + " (listId not more in database)...."
 			activities.delete_one({'_id': activity['_id']})
 		elif 'oldListId' in activity and lists.count({"_id": activity['oldListId']}) == 0 :
