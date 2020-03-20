@@ -27,6 +27,7 @@ def main() :
 	mongo_password = 'admin123'
 	mongo_server = 'localhost'
 	mongo_port = '27017'
+        mongo_database = 'wekan'
 	
 	# Variables
 	time_start = datetime.datetime.now()
@@ -37,7 +38,7 @@ def main() :
 	
 	# BDD
 	mongo = MongoClient('mongodb://' + mongo_user + ':' + mongo_password + '@' + mongo_server + ':' + mongo_port + '/')
-	db = mongo['admin']
+	db = mongo[mongo_database]
 	users = db['users']
 	boards = db['boards']
 	lists = db['lists']
