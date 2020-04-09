@@ -2,6 +2,8 @@
 
 Tools to clean up Mongodb database and delete archived cards / list / boards (after few months)
 
+## Local Installation
+
 Need to have below Python module : pymongo
 
     pip install pymongo
@@ -32,3 +34,53 @@ You need to update parameters before executing it
     mongo_password = 'admin123'
     mongo_server = 'localhost'
     mongo_port = '27017'
+
+## Docker Installation
+
+
+1. Build Docker Image
+
+Run the following command in the source root directory to build the docker image:
+```
+    docker build -t wekan-cleanup .
+```
+
+2. Create MongoDB User
+
+You still need a MongoDB user with access to the wekan database. 
+If MongoDB is running in a docker container you could enter the container via docker (e.g. `docker exec -it wekan-db mongo`) and create the user:
+```
+    use admin
+    db.createUser({user: "admin",pwd: "admin123",roles: [ "readWrite"]})
+```
+
+3. Save the password as a file
+
+Save the password as the content of a file on your computer, for example:
+```
+    echo "admin123" > .MONGO_PASSWORD
+```
+
+4. Run the docker container with your custom settings
+
+Before you execute this command, please make sure that you have a backup of your MongoDB.
+
+```
+docker run \
+    --rm \
+    -v "$PWD/.MONGO_PASSWORD:/.MONGO_PASSWORD" \
+    --env "MONGO_USER=admin" \
+    --env "MONGO_SERVER=wekandb" \
+    --env "MONGO_PORT=27017" \
+    --env "MONGO_DATABASE=wekan" \
+    --env "DAYS_TO_KEEP_BOARD_ARCHIVE=30" \
+    --env "DAYS_TO_KEEP_LIST_ARCHIVE=30" \
+    --env "DAYS_TO_KEEP_CARD_ARCHIVE=60" \
+    --env "DAYS_TO_KEEP_CARD_NOCARD=15" \
+    --network "wekan-mongodb_wekan-tier" \
+    wekan-cleanup
+```
+
+Make sure the MongoDB is accessible
+If the MongoDB is running in a docker container, you could either use its [network](https://docs.docker.com/engine/reference/run/#network-settings) or expose the MongoDB port, the former is recommended. The example above uses the default network from the Wekan's docker-compose setup.
+
