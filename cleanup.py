@@ -19,15 +19,18 @@ from pymongo import MongoClient
 def main() :
 	
 	# Parameters
-	day_to_keep_board_arch = 30
-	day_to_keep_list_arch = 30
-	day_to_keep_card_arch = 60
-	day_to_keep_board_nocard = 15
-	mongo_user = 'admin'
-	mongo_password = 'admin123'
-	mongo_server = 'localhost'
-	mongo_port = '27017'
-        mongo_database = 'wekan'
+	day_to_keep_board_arch = int(os.environ.get("DAYS_TO_KEEP_BOARD_ARCHIVE", "30"))
+	day_to_keep_list_arch = int(os.environ.get("DAYS_TO_KEEP_LIST_ARCHIVE", "30"))
+	day_to_keep_card_arch = int(os.environ.get("DAYS_TO_KEEP_CARD_ARCHIVE", "60"))
+	day_to_keep_board_nocard = int(os.environ.get("DAYS_TO_KEEP_CARD_NOCARD", "15"))
+	mongo_user = os.environ.get('MONGO_USER', "admin")
+	mongo_server = os.environ.get('MONGO_SERVER', "localhost")
+	mongo_port = os.environ.get('MONGO_PORT', "27017")
+	mongo_database = os.environ.get('MONGO_DATABASE', "wekan")
+	mongo_password = ''
+	if os.environ.get('MONGO_PASSWORD_PATH') is not None:
+		with open(os.environ.get('MONGO_PASSWORD_PATH'), 'r') as file:
+			mongo_password = file.read().strip()
 	
 	# Variables
 	time_start = datetime.datetime.now()

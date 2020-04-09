@@ -87,3 +87,6 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Exclude default password file
+.MONGO_PASSWORD
