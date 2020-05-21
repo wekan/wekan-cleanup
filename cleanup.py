@@ -76,9 +76,12 @@ def main() :
 	print "[BOARDS] Checking boards with no card into...."
 	for board in boards.find() :
 		if cards.count({"boardId": board['_id']}) == 0  and board['createdAt'] < time_clean_board_nocard :
-			print "[BOARD] Deleting board " + str(board['_id']) + " (0 card into and created more than " + str(day_to_keep_board_nocard) + " day(s) ago)...."
-			boards.delete_one({'_id': board['_id']})
-	
+			if board['type'] == 'template-container':
+				print "Ignoring " + str(board['_id']) + " because it's a template board "
+			else :
+				print "[BOARD] Deleting board " + str(board['_id']) + " (0 card into and created more than " + str(day_to_keep_board_nocard) + " day(s) ago)...."
+				boards.delete_one({'_id': board['_id']})
+
 	# Will update boards to remove deleted users
 	print "[BOARDS] Checking deleted user into boards (userId not more in database)...."
 	for board in boards.find() :
