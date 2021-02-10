@@ -69,6 +69,7 @@ Before you execute this command, please make sure that you have a backup of your
 docker run \
     --rm \
     -v "$PWD/.MONGO_PASSWORD:/.MONGO_PASSWORD" \
+    --env "MONGO_PASSWORD_PATH=/.MONGO_PASSWORD" \
     --env "MONGO_USER=admin" \
     --env "MONGO_SERVER=wekandb" \
     --env "MONGO_PORT=27017" \
