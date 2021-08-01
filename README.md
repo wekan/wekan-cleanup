@@ -2,6 +2,8 @@
 
 Tools to clean up Mongodb database and delete archived cards / list / boards (after few months)
 
+Using Python3.
+
 ## Local Installation
 
 Need to have below Python module : pymongo
