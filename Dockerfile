@@ -1,6 +1,6 @@
 FROM python:3-slim-buster
 
-RUN pip install pymongo
+RUN pip install "pymongo<4.0"
 
 ENV MONGO_USER "admin"
 ENV MONGO_PASSWORD_PATH ".MONGO_PASSWORD"
