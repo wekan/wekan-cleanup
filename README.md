@@ -47,6 +47,9 @@ Run the following command in the source root directory to build the docker image
     docker build -t wekan-cleanup .
 ```
 
+### With DB authentication
+
+
 2. Create MongoDB User
 
 You still need a MongoDB user with access to the wekan database. 
@@ -73,6 +76,28 @@ docker run \
     -v "$PWD/.MONGO_PASSWORD:/.MONGO_PASSWORD" \
     --env "MONGO_PASSWORD_PATH=/.MONGO_PASSWORD" \
     --env "MONGO_USER=admin" \
+    --env "MONGO_SERVER=wekandb" \
+    --env "MONGO_PORT=27017" \
+    --env "MONGO_DATABASE=wekan" \
+    --env "DAYS_TO_KEEP_BOARD_ARCHIVE=30" \
+    --env "DAYS_TO_KEEP_LIST_ARCHIVE=30" \
+    --env "DAYS_TO_KEEP_CARD_ARCHIVE=60" \
+    --env "DAYS_TO_KEEP_CARD_NOCARD=15" \
+    --network "wekan-mongodb_wekan-tier" \
+    wekan-cleanup
+```
+
+### Without DB authentication
+**NOT** recommended in production environments
+
+2. Run the docker container with your custom settings
+
+Before you execute this command, please make sure that you have a backup of your MongoDB.
+
+```
+docker run \
+    --rm \
+    --env "MONGO_USER_AUTHENTICATION=false" \
     --env "MONGO_SERVER=wekandb" \
     --env "MONGO_PORT=27017" \
     --env "MONGO_DATABASE=wekan" \

@@ -27,10 +27,15 @@ def main() :
 	mongo_server = os.environ.get('MONGO_SERVER', "localhost")
 	mongo_port = os.environ.get('MONGO_PORT', "27017")
 	mongo_database = os.environ.get('MONGO_DATABASE', "wekan")
-	mongo_password = ''
-	if os.environ.get('MONGO_PASSWORD_PATH') is not None:
-		with open(os.environ.get('MONGO_PASSWORD_PATH'), 'r') as file:
-			mongo_password = file.read().strip()
+	mongo_user_authentication = os.environ.get('MONGO_USER_AUTHENTICATION', "true")
+	if mongo_user_authentication.lower() == 'true':
+		mongo_password = ''
+		if os.environ.get('MONGO_PASSWORD_PATH') is not None:
+			with open(os.environ.get('MONGO_PASSWORD_PATH'), 'r') as file:
+				mongo_password = file.read().strip()
+		mongo_login = mongo_user + ':' + mongo_password + '@'
+	else:
+		mongo_login = ''
 	
 	# Variables
 	time_start = datetime.datetime.now()
@@ -40,7 +45,7 @@ def main() :
 	time_clean_board_nocard = time_start - datetime.timedelta(day_to_keep_board_nocard)
 	
 	# BDD
-	mongo = MongoClient('mongodb://' + mongo_user + ':' + mongo_password + '@' + mongo_server + ':' + mongo_port + '/')
+	mongo = MongoClient('mongodb://' + mongo_login + mongo_server + ':' + mongo_port + '/')
 	db = mongo[mongo_database]
 	users = db['users']
 	boards = db['boards']
