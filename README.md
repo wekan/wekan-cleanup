@@ -112,3 +112,6 @@ docker run \
 Make sure the MongoDB is accessible
 If the MongoDB is running in a docker container, you could either use its [network](https://docs.docker.com/engine/reference/run/#network-settings) or expose the MongoDB port, the former is recommended. The example above uses the default network from the Wekan's docker-compose setup.
 
+## Other useful parameters
+
+- `MONGO_DIRECT_CONNECTION`: Don't try to connect to all replica nodes. Useful when you enable MongoDB replicaset to take advantage from Oplog, but the replica has been configured with an unreachable address (for example, `localhost:27017`). See [pymongo docs](https://pymongo.readthedocs.io/en/stable/api/pymongo/mongo_client.html#pymongo.mongo_client.MongoClient)
