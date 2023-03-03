@@ -28,7 +28,6 @@ def main() :
 	mongo_port = os.environ.get('MONGO_PORT', "27017")
 	mongo_database = os.environ.get('MONGO_DATABASE', "wekan")
 	mongo_user_authentication = os.environ.get('MONGO_USER_AUTHENTICATION', "true")
-	mongo_direct_connection = os.environ.get('MONGO_DIRECT_CONNECTION', "false").lower() == 'true'
 	if mongo_user_authentication.lower() == 'true':
 		mongo_password = ''
 		if os.environ.get('MONGO_PASSWORD_PATH') is not None:
@@ -46,7 +45,7 @@ def main() :
 	time_clean_board_nocard = time_start - datetime.timedelta(day_to_keep_board_nocard)
 	
 	# BDD
-	mongo = MongoClient('mongodb://' + mongo_login + mongo_server + ':' + mongo_port + '/', directConnection=mongo_direct_connection)
+	mongo = MongoClient('mongodb://' + mongo_login + mongo_server + ':' + mongo_port + '/')
 	db = mongo[mongo_database]
 	users = db['users']
 	boards = db['boards']
