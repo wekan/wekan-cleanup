@@ -112,11 +112,12 @@ def main() :
 	print("[CARDS] Checking deleted user into cards (userId not more in database)....")
 	for card in cards.find() :
 		if 'members' in card :
-			for member in card["members"] :
-				if users.count_documents({"_id": member}) == 0 :
-					print("[CARD] User " + member + " need to be removed from card " + card["_id"] + " - Updating in progress...")
-					card["members"].remove(member)
-					cards.update({'_id':card["_id"]}, {"$set": card}, upsert=False)
+			if card["members"] is not None:
+				for member in card["members"] :
+					if users.count_documents({"_id": member}) == 0 :
+						print("[CARD] User " + member + " need to be removed from card " + card["_id"] + " - Updating in progress...")
+						card["members"].remove(member)
+						cards.update({'_id':card["_id"]}, {"$set": card}, upsert=False)
 	
 	# Will delete now lists with no boards
 	print("[LISTS] Deleting " + str(lists.count_documents({'boardId': 'false'})) + " orphan list(s) (boardId = False)....")
