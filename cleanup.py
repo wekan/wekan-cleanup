@@ -64,15 +64,16 @@ def main() :
 	for user in users.find() :
 		# Email with uppercase
 		user_duplicate = False
-		if user['emails'][0]['address'] != user['emails'][0]['address'].lower() :
-			for user_email_duplicate in users.find({'emails.address' : user['emails'][0]['address'].lower()}) :
-				user_duplicate = True
-				print("[USER][ALERT] Duplicate email user for " + user['_id'] + " (" + user['emails'][0]['address'] + ") and " + user_email_duplicate['_id'] + " (" + user_email_duplicate['emails'][0]['address'] + ")")
-			# We can update database
-			if user_duplicate == False :
-				print("[USER] Email of " + user['_id'] + " will be updated in database to use lowercase (" + user['emails'][0]['address'].lower() + ") - Updating in progress...")
-				user['emails'][0]['address'] = user['emails'][0]['address'].lower()
-				users.update({'_id':user["_id"]}, {"$set": user}, upsert=False)
+		if 'emails' in user : 
+			if user['emails'][0]['address'] != user['emails'][0]['address'].lower() :
+				for user_email_duplicate in users.find({'emails.address' : user['emails'][0]['address'].lower()}) :
+					user_duplicate = True
+					print("[USER][ALERT] Duplicate email user for " + user['_id'] + " (" + user['emails'][0]['address'] + ") and " + user_email_duplicate['_id'] + " (" + user_email_duplicate['emails'][0]['address'] + ")")
+				# We can update database
+				if user_duplicate == False :
+					print("[USER] Email of " + user['_id'] + " will be updated in database to use lowercase (" + user['emails'][0]['address'].lower() + ") - Updating in progress...")
+					user['emails'][0]['address'] = user['emails'][0]['address'].lower()
+					users.update({'_id':user["_id"]}, {"$set": user}, upsert=False)
 	
 	# Clean ALL archived boards (older than time_clean_board_arch)
 	print("[BOARDS] Deleting " + str(boards.count_documents({'archived': True, 'modifiedAt': {'$lt': time_clean_board_arch}})) + " archived board(s)....")
