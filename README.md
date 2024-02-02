@@ -8,7 +8,7 @@ Using Python3.
 
 Need to have below Python module : pymongo
 
-    pip install pymongo
+    pip install pymongo==3.13.0
 
 You need to have authentification setup on Mongo database and port opened (if docker) and create user :
 
